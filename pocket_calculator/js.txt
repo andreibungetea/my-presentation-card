@@ -1,0 +1,338 @@
+Perfect! 🚀 Vom construi calculatorul de la zero, folosind **JavaScript simplu (Vanilla JS)**.
+
+Vom avea două etape:
+
+1. Verificăm dacă toate butoanele funcționează.
+2. Introducem numere și efectuăm operații matematice.
+
+## 1. Structura HTML existentă
+
+Păstrăm HTML-ul tău, inclusiv ID-ul `devide`:
+
+```html
+<div class="general-container">
+    <input type="number" class="input-container">
+
+    <button class="button-design" id="plus">+</button>
+    <button class="button-design" id="minus">-</button>
+    <button class="button-design" id="multiply">*</button>
+    <button class="button-design" id="devide">/</button>
+    <button class="button-design" id="equals">=</button>
+    <button class="button-design reset-button" id="reset">C</button>
+</div>
+
+<script src="script.js"></script>
+```
+
+---
+
+## 2. JavaScript de la zero
+
+Creează un fișier `script.js`.
+
+### Pasul 1: Selectăm elementele
+
+```javascript
+const input = document.querySelector(".input-container");
+
+const plusButton = document.querySelector("#plus");
+const minusButton = document.querySelector("#minus");
+const multiplyButton = document.querySelector("#multiply");
+const divideButton = document.querySelector("#devide");
+const equalsButton = document.querySelector("#equals");
+const resetButton = document.querySelector("#reset");
+```
+
+Acum avem acces la toate butoanele.
+
+---
+
+### Pasul 2: Creăm variabilele calculatorului
+
+```javascript
+let firstNumber = null;
+let selectedOperator = null;
+```
+
+* `firstNumber` → primul număr introdus.
+* `selectedOperator` → operația selectată (`+`, `-`, `*`, `/`).
+
+---
+
+### Pasul 3: Funcția pentru selectarea operației
+
+```javascript
+function selectOperator(operator) {
+    firstNumber = Number(input.value);
+    selectedOperator = operator;
+
+    input.value = "";
+}
+```
+
+Când apeși `+`, de exemplu:
+
+1. Salvăm primul număr.
+2. Salvăm operatorul.
+3. Golim inputul pentru al doilea număr.
+
+---
+
+### Pasul 4: Adăugăm evenimentele pentru operatori
+
+```javascript
+plusButton.addEventListener("click", () => {
+    selectOperator("+");
+});
+
+minusButton.addEventListener("click", () => {
+    selectOperator("-");
+});
+
+multiplyButton.addEventListener("click", () => {
+    selectOperator("*");
+});
+
+divideButton.addEventListener("click", () => {
+    selectOperator("/");
+});
+```
+
+Acum toate cele patru operații sunt conectate.
+
+---
+
+### Pasul 5: Funcția pentru calcul
+
+```javascript
+function calculate() {
+    const secondNumber = Number(input.value);
+
+    if (firstNumber === null || selectedOperator === null) {
+        return;
+    }
+
+    let result;
+
+    switch (selectedOperator) {
+        case "+":
+            result = firstNumber + secondNumber;
+            break;
+
+        case "-":
+            result = firstNumber - secondNumber;
+            break;
+
+        case "*":
+            result = firstNumber * secondNumber;
+            break;
+
+        case "/":
+            if (secondNumber === 0) {
+                input.value = "Error";
+                return;
+            }
+
+            result = firstNumber / secondNumber;
+            break;
+
+        default:
+            return;
+    }
+
+    input.value = String(result);
+
+    firstNumber = null;
+    selectedOperator = null;
+}
+```
+
+---
+
+### Pasul 6: Butonul egal
+
+```javascript
+equalsButton.addEventListener("click", calculate);
+```
+
+---
+
+### Pasul 7: Butonul reset (C)
+
+```javascript
+resetButton.addEventListener("click", () => {
+    input.value = "";
+
+    firstNumber = null;
+    selectedOperator = null;
+});
+```
+
+---
+
+# 3. Codul complet `script.js`
+
+Poți copia tot codul de mai jos:
+
+```javascript
+const input = document.querySelector(".input-container");
+
+const plusButton = document.querySelector("#plus");
+const minusButton = document.querySelector("#minus");
+const multiplyButton = document.querySelector("#multiply");
+const divideButton = document.querySelector("#devide");
+const equalsButton = document.querySelector("#equals");
+const resetButton = document.querySelector("#reset");
+
+let firstNumber = null;
+let selectedOperator = null;
+
+// Selectare operator
+function selectOperator(operator) {
+    if (input.value.trim() === "") {
+        return;
+    }
+
+    firstNumber = Number(input.value);
+    selectedOperator = operator;
+
+    input.value = "";
+}
+
+// Operații
+plusButton.addEventListener("click", () => {
+    selectOperator("+");
+});
+
+minusButton.addEventListener("click", () => {
+    selectOperator("-");
+});
+
+multiplyButton.addEventListener("click", () => {
+    selectOperator("*");
+});
+
+divideButton.addEventListener("click", () => {
+    selectOperator("/");
+});
+
+// Calcul
+function calculate() {
+    if (firstNumber === null || selectedOperator === null) {
+        return;
+    }
+
+    const secondNumber = Number(input.value);
+
+    let result;
+
+    switch (selectedOperator) {
+        case "+":
+            result = firstNumber + secondNumber;
+            break;
+
+        case "-":
+            result = firstNumber - secondNumber;
+            break;
+
+        case "*":
+            result = firstNumber * secondNumber;
+            break;
+
+        case "/":
+            if (secondNumber === 0) {
+                input.value = "Error";
+                return;
+            }
+
+            result = firstNumber / secondNumber;
+            break;
+
+        default:
+            return;
+    }
+
+    input.value = String(result);
+
+    firstNumber = null;
+    selectedOperator = null;
+}
+
+// Egal
+equalsButton.addEventListener("click", calculate);
+
+// Reset
+resetButton.addEventListener("click", () => {
+    input.value = "";
+
+    firstNumber = null;
+    selectedOperator = null;
+});
+```
+
+---
+
+# 4. Testăm calculatorul
+
+Deschide pagina în browser și verifică:
+
+| Test       | Rezultat așteptat |
+| ---------- | ----------------- |
+| `5 + 3 =`  | `8`               |
+| `10 - 4 =` | `6`               |
+| `6 * 3 =`  | `18`              |
+| `20 / 5 =` | `4`               |
+| `10 / 0 =` | `Error`           |
+| `C`        | Input gol         |
+
+---
+
+## 5. Test automat pentru butoane
+
+Înainte să verificăm rezultatele matematice, putem verifica dacă toate butoanele există și au evenimente conectate.
+
+Adaugă temporar la finalul fișierului:
+
+```javascript
+const buttons = [
+    plusButton,
+    minusButton,
+    multiplyButton,
+    divideButton,
+    equalsButton,
+    resetButton
+];
+
+buttons.forEach((button) => {
+    if (button) {
+        console.log(`✅ Buton funcțional: ${button.id}`);
+    } else {
+        console.error("❌ Buton lipsă");
+    }
+});
+```
+
+**Important:** Acest test verifică existența butoanelor, nu și corectitudinea operațiilor.
+
+### Următorul pas
+
+După ce verificăm funcționarea de bază, putem construi un **test automat real**, care:
+
+* Introduce automat numere.
+* Apasă operatorul.
+* Apasă egal.
+* Verifică dacă rezultatul este corect.
+
+De exemplu:
+
+```javascript
+testCalculator("5", "+", "3", 8);
+```
+
+Și în consolă:
+
+```text
+✅ Test trecut: 5 + 3 = 8
+```
+
+Asta ne va permite să testăm calculatorul ca într-un proiect real de JavaScript.
